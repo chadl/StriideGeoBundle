@@ -1,0 +1,22 @@
+parameters:
+
+services:
+  striide_geo.zcu.service:
+    class: Striide\GeoBundle\Service\ZcuGeoService
+    arguments: [@doctrine,@logger]
+  striide_geo.postalcode.service:
+    class: Striide\GeoBundle\Service\PostalCodeGeoService
+    arguments: [@doctrine,@logger]
+    calls:
+      - [setGeoCoderService, [@striide_geo.geo.service]]
+  striide_geo.geo.service:
+    class: Striide\GeoBundle\Service\GeoService
+    arguments: [@doctrine,@logger]
+    calls:
+      - [setRestClient, [@striide_rest.rest.service]]
+  striide_geo.timezone.service:
+    class: Striide\GeoBundle\Service\TimezoneService
+    arguments: [@logger]
+    calls:
+      - [setRestClient, [@striide_rest.rest.service]]
+      - [setPostalService, [@striide_geo.postalcode.service]]

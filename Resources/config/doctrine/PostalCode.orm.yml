@@ -1,0 +1,24 @@
+Striide\GeoBundle\Entity\PostalCode:
+  type: entity
+  table: striide_postalcode
+  repositoryClass: Striide\GeoBundle\Entity\PostalCodeRepository
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    code:
+      type: string
+      length: 40
+      nullable: false
+    lat:
+      type: float
+      nullable: false
+    lng:
+      type: float
+      nullable: false
+    serialized:
+      type: text
+      nullable: true
+  lifecycleCallbacks: {  }

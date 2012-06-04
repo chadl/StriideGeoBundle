@@ -1,0 +1,50 @@
+Striide\GeoBundle\Entity\Zcu:
+  type: entity
+  table: zcu
+  repositoryClass: Striide\GeoBundle\Entity\ZcuRepository
+  id:
+    zip:
+      type: string
+      length: 20
+  fields:
+    city:
+      type: string
+      length: 50
+      nullable: true
+    st:
+      type: string
+      length: 50
+      nullable: true
+    ac:
+      type: string
+      length: 10
+      nullable: true
+    county:
+      type: string
+      length: 20
+      nullable: true
+    tz:
+      type: string
+      length: 20
+      nullable: true
+    dst:
+      type: string
+      length: 2
+      nullable: true
+    country:
+      type: string
+      length: 2
+      nullable: true
+    type:
+      type: string
+      length: 20
+      nullable: true
+    pref:
+      type: string
+      length: 20
+      nullable: true
+    fips:
+      type: string
+      length: 20
+      nullable: true
+  lifecycleCallbacks: {  }

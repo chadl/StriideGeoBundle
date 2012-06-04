@@ -1,0 +1,24 @@
+Striide\GeoBundle\Entity\StatesCa:
+  type: entity
+  table: striide_geo_states_ca
+  repositoryClass: Striide\GeoBundle\Entity\StatesCaRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    shortCode:
+      type: string
+      length: 5
+      fixed: true
+      nullable: false
+      column: short_code
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+  lifecycleCallbacks: {  }
