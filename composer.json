@@ -17,8 +17,8 @@
 	"minimum-stability": "dev",
 	"autoload": {
 		"psr-0": {
-			"Striidei\\GeoBundle": ""
+			"Striide\\GeoBundle": ""
 		}
 	},
-	"target-dir": "Striide/StriideGeoBundle"
+	"target-dir": "StriideGeoBundle"
 }
