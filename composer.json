@@ -20,5 +20,5 @@
 			"Striide\\GeoBundle": ""
 		}
 	},
-	"target-dir": "Striide/GeoBundle/StriideGeoBundle"
+	"target-dir": "Striide/GeoBundle"
 }
