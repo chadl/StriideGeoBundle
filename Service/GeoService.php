@@ -1,19 +1,82 @@
 <?php
 namespace Striide\GeoBundle\Service;
 
+use Striide\GeoBundle\Entity\GeoIP;
+
 class GeoService
 {
+  /**
+   *
+   */
   private $logger = null;
+
+  /**
+   *
+   */
   public function __construct($doctrine,$logger)
   {
     $this->doctrine = $doctrine;
     $this->logger = $logger;
   }
+
+  /**
+   *
+   */
   private $rest_client = null;
+
+  /**
+   *
+   */
   public function setRestClient($client)
   {
     $this->rest_client = $client;
   }
+
+  /**
+   * @return GeoIP
+   */
+  public function getLocationByIp($ip)
+  {
+    //
+
+    $this->logger->info(sprintf("Looking up address by ip... (%s)",$ip));
+
+    $em = $this->doctrine->getEntityManager();
+    $repo = $em->getRepository('StriideGeoBundle:GeoIP');
+
+    $geoip = $repo->findOneByIp($ip);
+
+    if(!empty($geoip))
+    {
+      return $geoip;
+    }
+
+    try
+    {
+      $payload = $this->rest_client->get(sprintf("http://freegeoip.net/json/%s", $ip));
+
+      if(!empty($payload))
+      {
+        $geoip = new GeoIP();
+        $geoip->setIp($ip);
+        $geoip->setJson($payload);
+
+        $em->persist($geoip);
+        $em->flush();
+
+        return $geoip;
+      }
+      return null;
+    }
+    catch(\Exception $e)
+    {
+      return null;
+    }
+  }
+
+  /**
+   *
+   */
   public function getLocationByAddress($address)
   {
     $this->logger->info(sprintf("Looking up address... (%s)", $address));
@@ -30,7 +93,9 @@ class GeoService
     }
   }
 
-
+  /**
+   *
+   */
   public function getCountriesArray()
   {
     $repository = $this->doctrine->getEntityManager()->getRepository('StriideGeoBundle:Countries');
@@ -48,6 +113,10 @@ class GeoService
     }
     return $array;
   }
+
+  /**
+   *
+   */
   public function getRegionsArrayByCountry($country)
   {
 
@@ -62,6 +131,10 @@ class GeoService
     }
     return array();
   }
+
+  /**
+   *
+   */
   public function getStatesArray()
   {
     $repository = $this->doctrine->getEntityManager()->getRepository('StriideGeoBundle:StatesUs');
@@ -85,6 +158,10 @@ class GeoService
     }
     return $array;
   }
+
+  /**
+   *
+   */
   public function getProvincesArray()
   {
     $repository = $this->doctrine->getEntityManager()->getRepository('StriideGeoBundle:StatesCa');

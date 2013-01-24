@@ -7,7 +7,7 @@ class CountriesRepository extends EntityRepository
   /**
    *
    */
-  public function getArray() 
+  public function getArray()
   {
     $query = $this->getEntityManager()->createQuery('
 					SELECT c
@@ -19,7 +19,7 @@ class CountriesRepository extends EntityRepository
       $countries = $query->getResult();
       return $countries;
     }
-    catch(\Doctrine\ORM\NoResultException $e) 
+    catch(\Doctrine\ORM\NoResultException $e)
     {
       return null;
     }

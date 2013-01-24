@@ -11,7 +11,7 @@ class DefaultController extends Controller
    * @Route("/geo/postalcode/{code}", name="StriideGeoBundle_postalcode")
    * @Template()
    */
-  public function postalcodeAction($code) 
+  public function postalcodeAction($code)
   {
     $pc = $this->get('striide_geo.postalcode.service')->getLocationByPostalCode($code);
     return array(
@@ -23,11 +23,11 @@ class DefaultController extends Controller
    * @Route("/zcu/zipcode", name="StriideGeoBundle_zip")
    * @Template()
    */
-  public function zipcodeAction() 
+  public function zipcodeAction()
   {
     $code = $this->get('request')->query->get('zipcode');
-    
-    if (empty($code)) 
+
+    if (empty($code))
     {
       return new Response(json_encode(array(
         'status' => false,
@@ -35,8 +35,8 @@ class DefaultController extends Controller
       )));
     }
     $zcu = $this->get('striide_geo.zcu.service')->getLocationByZipcode($code);
-    
-    if (empty($zcu)) 
+
+    if (empty($zcu))
     {
       return new Response(json_encode(array(
         'status' => false,

@@ -4,21 +4,45 @@ use Striide\GeoBundle\Model\Timezone;
 
 class TimezoneService
 {
+  /**
+   *
+   */
   private $logger = null;
+
+  /**
+   *
+   */
   public function __construct($logger)
   {
     $this->logger = $logger;
   }
+
+  /**
+   *
+   */
   private $rest_client = null;
+
+  /**
+   *
+   */
   public function setRestClient($client)
   {
     $this->rest_client = $client;
   }
+
+  /**
+   *
+   */
   private $postal_service = null;
+
+  /**
+   *
+   */
   public function setPostalService($service)
   {
     $this->postal_service = $service;
   }
+
   /**
    * in Javascript you can get the offset using:
    *
@@ -43,6 +67,7 @@ class TimezoneService
     $zone = new \DateTimeZone($timezone_string);
     return $zone;
   }
+
   /**
    * Get the timezone based on the lat/lng
    * @param float $lat latitude
@@ -62,6 +87,7 @@ class TimezoneService
     }
     return null;
   }
+
   /**
    * Get the timezone based on the postalcode
    * @param string $code postalcode
@@ -79,6 +105,7 @@ class TimezoneService
     $tz = $this->getTimezoneByLatLng($pc->getLat() , $pc->getLng());
     return $tz;
   }
+
   public function getTimezones()
   {
     $zones = array();

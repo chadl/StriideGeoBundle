@@ -4,18 +4,41 @@ use Striide\GeoBundle\Factory\PostalCodeFactory;
 
 class PostalCodeGeoService
 {
+  /**
+   *
+   */
   private $logger = null;
+
+  /**
+   *
+   */
   private $doctrine = null;
+
+  /**
+   *
+   */
   public function __construct($doctrine, $logger)
   {
     $this->logger = $logger;
     $this->doctrine = $doctrine;
   }
+
+  /**
+   *
+   */
   private $geocoder_service = null;
+
+  /**
+   *
+   */
   public function setGeoCoderService($service)
   {
     $this->geocoder_service = $service;
   }
+
+  /**
+   *
+   */
   public function getLocationByPostalCode($postalcode)
   {
     $this->logger->info(sprintf("Looking up postalcode... (%s)", $postalcode));
@@ -28,7 +51,7 @@ class PostalCodeGeoService
     if (empty($pc))
     {
       $location = $this->geocoder_service->getLocationByAddress($postalcode);
-      
+
       $pc = PostalCodeFactory::createInstance()->createFromGoogleLocation($postalcode, $location);
 
       if (is_null($pc))
