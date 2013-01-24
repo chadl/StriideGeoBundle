@@ -1,0 +1,22 @@
+Striide\GeoBundle\Entity\GeoIP:
+  type: entity
+  table: striide_geo_ip
+  repositoryClass: Striide\GeoBundle\Entity\GeoIPRepository
+  indexes:
+    ip_idx:
+        columns: [ ip ]
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    ip:
+      type: string
+      nullable: false
+    json:
+      type: text
+      nullable: false
+  lifecycleCallbacks: {  }
