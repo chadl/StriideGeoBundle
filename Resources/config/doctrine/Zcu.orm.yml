@@ -2,15 +2,19 @@ Striide\GeoBundle\Entity\Zcu:
   type: entity
   table: zcu
   repositoryClass: Striide\GeoBundle\Entity\ZcuRepository
+  indexes:
+    zip:
+      columns: [ "zip" ]
   id:
     zip:
       type: string
       length: 20
-  fields:
+      nullable: true
     city:
       type: string
       length: 50
       nullable: true
+  fields:
     st:
       type: string
       length: 50
