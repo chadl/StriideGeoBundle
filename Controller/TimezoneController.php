@@ -11,7 +11,7 @@ class TimezoneController extends Controller
    * @Route("/geo/timezone/offset", name="striide_geo_timezone_offset")
    * @Template()
    */
-  public function offsetAction() 
+  public function offsetAction()
   {
     $offset = $this->get('request')->query->get('offset');
     $tz = $this->get('striide_geo.timezone.service')->getTimezoneByOffset($offset);

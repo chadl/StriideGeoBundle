@@ -35,7 +35,7 @@ class ZcuGeoService
       $zipcode = str_replace(" ", "", $zipcode);
       $zipcode = substr($zipcode, 0, 3) . " " . substr($zipcode, 3, 3);
     }
-    $em = $this->doctrine->getEntityManager();
+    $em = $this->doctrine->getManager();
     $repository = $em->getRepository("StriideGeoBundle:Zcu");
     $zcu = $repository->findZcuArrayByZip($zipcode);
     return $zcu;

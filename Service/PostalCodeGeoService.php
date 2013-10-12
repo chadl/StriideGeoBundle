@@ -42,7 +42,7 @@ class PostalCodeGeoService
   public function getLocationByPostalCode($postalcode)
   {
     $this->logger->info(sprintf("Looking up postalcode... (%s)", $postalcode));
-    $em = $this->doctrine->getEntityManager();
+    $em = $this->doctrine->getManager();
     $repository = $em->getRepository("StriideGeoBundle:PostalCode");
     $pc = $repository->findOneBy(array(
       'code' => $postalcode

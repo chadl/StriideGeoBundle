@@ -7,7 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class LocationController extends Controller
 {
-
   /**
    * @Route("/geo/states.{_format}", name="StriideGeoBundle_get_states", defaults={ "_format" = "json"})
    */

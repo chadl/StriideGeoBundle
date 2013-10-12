@@ -41,7 +41,7 @@ class GeoService
 
     $this->logger->info(sprintf("Looking up address by ip... (%s)",$ip));
 
-    $em = $this->doctrine->getEntityManager();
+    $em = $this->doctrine->getManager();
     $repo = $em->getRepository('StriideGeoBundle:GeoIP');
 
     $geoip = $repo->findOneByIp($ip);
@@ -98,7 +98,7 @@ class GeoService
    */
   public function getCountriesArray()
   {
-    $repository = $this->doctrine->getEntityManager()->getRepository('StriideGeoBundle:Countries');
+    $repository = $this->doctrine->getManager()->getRepository('StriideGeoBundle:Countries');
     $countries = $repository->getArray();
     $array = array();
     foreach ($countries as $country)
@@ -137,7 +137,7 @@ class GeoService
    */
   public function getStatesArray()
   {
-    $repository = $this->doctrine->getEntityManager()->getRepository('StriideGeoBundle:StatesUs');
+    $repository = $this->doctrine->getManager()->getRepository('StriideGeoBundle:StatesUs');
     $states = $repository->getArray();
     $array = array();
     foreach ($states as $state)
@@ -164,7 +164,7 @@ class GeoService
    */
   public function getProvincesArray()
   {
-    $repository = $this->doctrine->getEntityManager()->getRepository('StriideGeoBundle:StatesCa');
+    $repository = $this->doctrine->getManager()->getRepository('StriideGeoBundle:StatesCa');
     $provinces = $repository->getArray();
     $array = array();
     foreach ($provinces as $province)
