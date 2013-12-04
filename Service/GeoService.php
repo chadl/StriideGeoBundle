@@ -2,6 +2,7 @@
 namespace Striide\GeoBundle\Service;
 
 use Striide\GeoBundle\Entity\GeoIP;
+use Striide\GeoBundle\Entity\GeoIpHarvesting;
 
 class GeoService
 {
@@ -9,14 +10,26 @@ class GeoService
    *
    */
   private $logger = null;
+  
+  /**
+   *
+   */
+  public function setLogger($logger)
+  {
+    $this->logger = $logger;
+  }
+  
+  /**
+   *
+   */
+  private $em = null;
 
   /**
    *
    */
-  public function __construct($doctrine,$logger)
+  public function setEntityManager($e)
   {
-    $this->doctrine = $doctrine;
-    $this->logger = $logger;
+    $this->em = $e;
   }
 
   /**
@@ -31,47 +44,92 @@ class GeoService
   {
     $this->rest_client = $client;
   }
+  
+  /**
+   * queue the record to harvest
+   */
+  public function queueHarvest($ip)
+  {
+    $this->logger->info(__METHOD__,array($ip));
+    
+    // only harvest if we need to
+    $geoip = $this->em->getRepository('StriideGeoBundle:GeoIP')->findOneByIp($ip);
+    if(!empty($geoip))
+    {
+      return;
+    }
+    
+    $geoip = $this->em->getRepository('StriideGeoBundle:GeoIpHarvesting')->findOneBy(array('ip' => $ip));
+    if(!empty($geoip))
+    {
+      return;
+    }
+    
+    $harvest = new GeoIpHarvesting();
+    $harvest->setIp($ip);
+    
+    $this->em->persist($harvest);
+    $this->em->flush();
+    $this->em->clear();
+  }
+  
+  /**
+   * @param string $ip
+   * @return null
+   */
+  public function harvestLocationByIp($ip)
+  {
+    $this->logger->info(__METHOD__,array($ip));
+    
+    $geoip = $this->em->getRepository('StriideGeoBundle:GeoIP')->findOneByIp($ip);
+    if(!empty($geoip))
+    {
+      return $geoip;
+    }
+    
+    try
+    {
+      $payload = $this->rest_client->get(sprintf("http://freegeoip.net/json/%s", $ip));
+    }
+    catch(\Exception $e)
+    {
+      return null;
+    }
+    
+    if(!empty($payload))
+    {
+      $geoip = new GeoIP();
+      $geoip->setIp($ip);
+      $geoip->setJson($payload);
+
+      $this->em->persist($geoip);
+      $this->em->flush();
+      $this->em->clear();
+
+      return $geoip;
+    }
+    
+    return null;
+  }
 
   /**
    * @return GeoIP
    */
   public function getLocationByIp($ip)
   {
-    //
-
     $this->logger->info(sprintf("Looking up address by ip... (%s)",$ip));
 
-    $em = $this->doctrine->getManager();
-    $repo = $em->getRepository('StriideGeoBundle:GeoIP');
-
-    $geoip = $repo->findOneByIp($ip);
-
+    $geoip = $this->em->getRepository('StriideGeoBundle:GeoIP')->findOneByIp($ip);
     if(!empty($geoip))
     {
       return $geoip;
     }
-
-    try
+    else
     {
-      $payload = $this->rest_client->get(sprintf("http://freegeoip.net/json/%s", $ip));
-
-      if(!empty($payload))
-      {
-        $geoip = new GeoIP();
-        $geoip->setIp($ip);
-        $geoip->setJson($payload);
-
-        $em->persist($geoip);
-        $em->flush();
-
-        return $geoip;
-      }
-      return null;
+      // queue harvesting....
+      $this->queueHarvest($ip);
     }
-    catch(\Exception $e)
-    {
-      return null;
-    }
+    return null;
   }
 
   /**
@@ -98,7 +156,7 @@ class GeoService
    */
   public function getCountriesArray()
   {
-    $repository = $this->doctrine->getManager()->getRepository('StriideGeoBundle:Countries');
+    $repository = $this->em->getRepository('StriideGeoBundle:Countries');
     $countries = $repository->getArray();
     $array = array();
     foreach ($countries as $country)
@@ -137,7 +195,7 @@ class GeoService
    */
   public function getStatesArray()
   {
-    $repository = $this->doctrine->getManager()->getRepository('StriideGeoBundle:StatesUs');
+    $repository = $this->em->getRepository('StriideGeoBundle:StatesUs');
     $states = $repository->getArray();
     $array = array();
     foreach ($states as $state)
@@ -164,7 +222,7 @@ class GeoService
    */
   public function getProvincesArray()
   {
-    $repository = $this->doctrine->getManager()->getRepository('StriideGeoBundle:StatesCa');
+    $repository = $this->em->getRepository('StriideGeoBundle:StatesCa');
     $provinces = $repository->getArray();
     $array = array();
     foreach ($provinces as $province)

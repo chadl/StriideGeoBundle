@@ -11,8 +11,9 @@ services:
       - [setGeoCoderService, [@striide_geo.geo.service]]
   striide_geo.geo.service:
     class: Striide\GeoBundle\Service\GeoService
-    arguments: [@doctrine,@logger]
     calls:
+      - [setLogger, [@logger]]
+      - [setEntityManager, [@doctrine.orm.entity_manager]]
       - [setRestClient, [@striide_rest.rest.service]]
   striide_geo.timezone.service:
     class: Striide\GeoBundle\Service\TimezoneService

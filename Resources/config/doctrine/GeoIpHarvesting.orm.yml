@@ -1,0 +1,20 @@
+Striide\GeoBundle\Entity\GeoIpHarvesting:
+  type: entity
+  table: striide_geo_ip_harvesting
+  repositoryClass: Striide\GeoBundle\Entity\GeoIpHarvestingRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    ip:
+      type: string
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: true
+      column: created_at
+  lifecycleCallbacks: {  }
